@@ -1,0 +1,31 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+using Entities;
+using System;
+using System.Collections.Generic;
+using System.Data;
+
+namespace DAL
+{
+    public class DALFactory
+    {
+        private Dictionary<Type,Type> Mapper { get; set; }
+
+        public DALFactory()
+        {
+            Mapper = new Dictionary<Type, Type>();
+<#    foreach (string objName in ObjectNames) { #>
+            Mapper.Add(typeof(<#= objName #>Entity), typeof(<#= objName #>DAL));
+<#    } #>
+        }
+
+        public IDAL<T> Create<T>() where T : BaseEntity
+        {
+            IDbConnection connection = new ConnectionFactory().Create();
+            return (IDAL<T>)Activator.CreateInstance(Mapper[typeof(T)], connection);
+        }
+    }
+}

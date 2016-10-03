@@ -1,0 +1,30 @@
+﻿<#@ template language="C#" inherits="DataTemplate" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+using System;
+using System.Text;
+using System.Data;
+
+namespace Entities
+{
+<# var columnTemplate = templateData.ObjectData; #>
+<# var filteredColumns = columnTemplate.Where(f => f.ColumnName != templateData.ObjectData.PrimaryKeyName); #>
+	public class <#= columnTemplate.EntityName #> : BaseEntity
+	{
+<# foreach (var field in filteredColumns) { #>
+		public <#= field.Type.Name #> <#= field.PropertyName #> { get; set; }
+<# } #>
+
+		public <#= columnTemplate.EntityName #>() : base(){}
+
+        public <#= columnTemplate.EntityName #>(IDataRecord dataRecord) : base (dataRecord)
+        {
+<# foreach (var field in filteredColumns) { #>
+			<#= field.PropertyName #> = (<#= field.Type.Name #>)dataRecord["<#= field.ColumnName #>"];
+<# } #>
+        }
+
+	}
+}

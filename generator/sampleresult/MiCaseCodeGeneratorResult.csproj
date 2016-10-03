@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6E2132A0-89F5-4CF4-8EB7-FC9EEA7D653D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MiCaseCodeGeneratorResult</RootNamespace>
+    <AssemblyName>MiCaseCodeGeneratorResult</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DAL\DALFactory.cs" />
+    <Compile Include="DAL\Interfaces\IDAL.cs" />
+    <Compile Include="DAL\Interfaces\IDelete.cs" />
+    <Compile Include="DAL\Interfaces\IGet.cs" />
+    <Compile Include="DAL\Interfaces\ISave.cs" />
+    <Compile Include="DAL\RelDietDAL.cs" />
+    <Compile Include="Entities\BaseEntity.cs" />
+    <Compile Include="Entities\RelDietEntity.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="Logic\BaseLogic.cs" />
+    <Compile Include="Logic\Interfaces\IDelete.cs" />
+    <Compile Include="Logic\Interfaces\IGet.cs" />
+    <Compile Include="Logic\Interfaces\ILogic.cs" />
+    <Compile Include="Logic\Interfaces\ISave.cs" />
+    <Compile Include="Logic\LogicFactory.cs" />
+    <Compile Include="Logic\RelDietLogic.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+	<Compile Include="DAL\TestDAL.cs" />
+	<Compile Include="Entities\TestEntity.cs" />
+	<Compile Include="Logic\TestLogic.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

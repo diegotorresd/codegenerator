@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3B40C4F6-B79B-450A-A3E6-D89DB4D61CC9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CodeGenerator</RootNamespace>
+    <AssemblyName>CodeGenerator</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.12.1.24160719\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Connectors\ConnectorFactory.cs" />
+    <Compile Include="Connectors\ConnectorType.cs" />
+    <Compile Include="Converters\OracleConverter.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="FileTypes\FileType.cs" />
+    <Compile Include="FileTypes\FileTypesGenerator.cs" />
+    <Compile Include="GeneratorManager.cs" />
+    <Compile Include="Generators\DALGenerator.cs" />
+    <Compile Include="Generators\DALTestGenerator.cs" />
+    <Compile Include="Generators\EntityGenerator.cs" />
+    <Compile Include="Generators\FactoryFileGenerator.cs" />
+    <Compile Include="Generators\GeneratorFactory.cs" />
+    <Compile Include="Generators\LogicGenerator.cs" />
+    <Compile Include="Generators\LogicTestGenerator.cs" />
+    <Compile Include="Converters\Interfaces\IConverter.cs" />
+    <Compile Include="Model\TemplateData.cs" />
+    <Compile Include="TemplateInitializer.cs" />
+    <Compile Include="Error\ErrorCode.cs" />
+    <Compile Include="Error\Exceptions.cs" />
+    <Compile Include="Generators\Generator.cs" />
+    <Compile Include="Generators\GeneratorResult.cs" />
+    <Compile Include="Model\NameTypePair.cs" />
+    <Compile Include="Model\ObjectData.cs" />
+    <Compile Include="Model\ProcedureParameter.cs" />
+    <Compile Include="Model\ProcedureData.cs" />
+    <Compile Include="Generators\ProjectFileGenerator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Templates\DALFactoryTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DALFactoryTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\DALFactoryTemplateCode.cs" />
+    <Compile Include="Templates\DALTemplate.cs">
+      <DependentUpon>DALTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Templates\DALTemplateCode.cs" />
+    <Compile Include="Templates\DALTestTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DALTestTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\DALTestTemplateCode.cs" />
+    <Compile Include="Templates\DataTemplate.cs" />
+    <Compile Include="Templates\EntityTemplate.cs">
+      <DependentUpon>EntityTemplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Templates\EntityTemplateCode.cs" />
+    <Compile Include="Templates\LogicFactoryTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LogicFactoryTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\LogicFactoryTemplateCode.cs" />
+    <Compile Include="Templates\LogicTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LogicTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\LogicTemplateCode.cs" />
+    <Compile Include="Templates\LogicTestTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LogicTestTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\LogicTestTemplateCode.cs" />
+    <Compile Include="Templates\ProjectFileTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProjectFileTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\ProjectFileTemplateCode.cs" />
+    <Compile Include="Templates\BaseTemplate.cs" />
+    <Compile Include="Templates\TestProjectFileTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestProjectFileTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templates\TestProjectFileTemplateCode.cs" />
+    <Compile Include="Templates\TestTemplate.cs" />
+    <Compile Include="TextTransformExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Templates\DALTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>DALTemplate.cs</LastGenOutput>
+      <CustomToolNamespace>CodeGenerator.Templates</CustomToolNamespace>
+    </None>
+    <None Include="Templates\DALTestTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>DALTestTemplate.cs</LastGenOutput>
+      <CustomToolNamespace>CodeGenerator.Templates</CustomToolNamespace>
+    </None>
+    <None Include="Templates\EntityTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>EntityTemplate.cs</LastGenOutput>
+      <CustomToolNamespace>CodeGenerator.Templates</CustomToolNamespace>
+    </None>
+    <None Include="Templates\LogicTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LogicTemplate.cs</LastGenOutput>
+      <CustomToolNamespace>CodeGenerator.Templates</CustomToolNamespace>
+    </None>
+    <None Include="Templates\LogicTestTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LogicTestTemplate.cs</LastGenOutput>
+      <CustomToolNamespace>CodeGenerator.Templates</CustomToolNamespace>
+    </None>
+    <None Include="Templates\ProjectFileTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ProjectFileTemplate.cs</LastGenOutput>
+      <CustomToolNamespace>CodeGenerator.Templates</CustomToolNamespace>
+    </None>
+    <None Include="Templates\TestProjectFileTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>TestProjectFileTemplate.cs</LastGenOutput>
+      <CustomToolNamespace>CodeGenerator.Templates</CustomToolNamespace>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Templates\DALFactoryTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>DALFactoryTemplate.cs</LastGenOutput>
+    </Content>
+    <Content Include="Templates\LogicFactoryTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LogicFactoryTemplate.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,136 @@
+﻿<#@ template language="C#" inherits="TestTemplate" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+using DAL;
+using Entities;
+using Logic;
+using Moq;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Logic_Tests
+{
+<#    var ObjectData = templateData.ObjectData;
+    var InsertProcedureTemplate = templateData.ProcedureDataList["PR_INSERT"];
+ #>
+    [TestFixture]
+[Category("<#= ObjectData.ObjectName #>Logic")]
+    public class <#= ObjectData.ObjectName #>LogicTests
+    {
+        private Mock<IDAL<<#= ObjectData.EntityName #>>> <#= ObjectData.ObjectName #>DAL;
+
+        public <#= ObjectData.EntityName #> TestEntity = new <#= ObjectData.EntityName #>()
+        {
+<#    PushIndent("\t\t\t\t");
+    foreach (var field in ObjectData) {  
+        WriteLine("{0} = {1},", field.PropertyName, TestValueForPropertyType[field.Type]);      
+    }
+    PopIndent(); #>    
+        };
+
+        public List<<#= ObjectData.EntityName #>> TestEntityList = new List<<#= ObjectData.EntityName #>>();
+
+        [SetUp]
+        public virtual void Setup()
+        {
+            <#= ObjectData.ObjectName #>DAL = new Mock<IDAL<<#= ObjectData.EntityName #>>>();
+            
+            TestEntityList.Add(TestEntity);
+
+            <#= ObjectData.ObjectName #>DAL.Setup(r => r.Get(It.IsAny<Int32>())).Returns(new <#= ObjectData.EntityName #>());
+            <#= ObjectData.ObjectName #>DAL.Setup(r => r.GetAll()).Returns(new List<<#= ObjectData.EntityName #>>());
+            <#= ObjectData.ObjectName #>DAL.Setup(r => r.Save(TestEntity)).Returns(0);
+            <#= ObjectData.ObjectName #>DAL.Setup(r => r.Update(It.IsAny<<#= ObjectData.EntityName #>>()));
+            <#= ObjectData.ObjectName #>DAL.Setup(r => r.Delete(It.IsAny<Int32>()));
+        }
+<#    var outParam = InsertProcedureTemplate.OutParam; #>
+
+        [Test()]
+        public void  Test_Get_Exists_ReturnsEntity()
+        {
+            <#= ObjectData.ObjectName #>DAL.Setup(r => r.Get(TestEntity.<#= outParam.PropertyName #>)).Returns(TestEntity);
+            var logic = new LogicFactory().Create<<#= ObjectData.EntityName #>>(<#= ObjectData.ObjectName #>DAL.Object);
+
+			var actual = logic.Get(TestEntity.<#= outParam.PropertyName #>);
+            
+            Assert.AreEqual(TestEntity.<#= outParam.PropertyName #>, actual.<#= outParam.PropertyName #>);
+			<#= ObjectData.ObjectName #>DAL.Verify(x => x.Get(TestEntity.<#= outParam.PropertyName #>), Times.Once);
+        }
+
+        [Test()]
+        public void Test_Get_NonExists_ReturnsEmptyEntity()
+        {
+			var logic = new LogicFactory().Create<<#= ObjectData.EntityName #>>(<#= ObjectData.ObjectName #>DAL.Object);
+
+			var actual = logic.Get(TestEntity.<#= outParam.PropertyName #>);
+
+			Assert.AreEqual(0, actual.<#= outParam.PropertyName #>);
+			<#= ObjectData.ObjectName #>DAL.Verify(x => x.Get(TestEntity.<#= outParam.PropertyName #>), Times.Once);
+        }
+
+        [Test()]
+        public void Test_GetAll_Exists_ReturnsEntities()
+        {
+            <#= ObjectData.ObjectName #>DAL.Setup(r => r.GetAll()).Returns(TestEntityList);
+            var logic = new LogicFactory().Create<<#= ObjectData.EntityName #>>(<#= ObjectData.ObjectName #>DAL.Object);
+
+			var actual = logic.GetAll();
+
+			Assert.AreEqual(TestEntityList, actual);            
+            <#= ObjectData.ObjectName #>DAL.Verify(x => x.GetAll(), Times.Once);
+        }
+
+        [Test()]
+        public void Test_GetAll_NonExists_ReturnsEmptyList()
+        {
+			var logic = new LogicFactory().Create<<#= ObjectData.EntityName #>>(<#= ObjectData.ObjectName #>DAL.Object);
+
+			var actual = logic.GetAll();
+
+            Assert.AreEqual(new List<<#= ObjectData.EntityName #>>(), actual);
+            <#= ObjectData.ObjectName #>DAL.Verify(x => x.GetAll(), Times.Once);
+        }
+
+        [Test()]
+        public void Test_Save_Insert_ReturnsId()
+        {
+			var saveEntity = new <#= ObjectData.EntityName #>();
+            <#= ObjectData.ObjectName #>DAL.Setup(r => r.Save(saveEntity)).Returns(TestEntity.<#= outParam.PropertyName #>);
+            var logic = new LogicFactory().Create<<#= ObjectData.EntityName #>>(<#= ObjectData.ObjectName #>DAL.Object);
+
+            var actual = logic.Save(saveEntity);
+
+            Assert.AreEqual(TestEntity.<#= outParam.PropertyName #>, actual);
+            <#= ObjectData.ObjectName #>DAL.Verify(x => x.Save(saveEntity), Times.Once);
+        }
+
+        [Test()]
+        public void Test_Save_Update_ReturnsId()
+        {
+            <#= ObjectData.ObjectName #>DAL.Setup(r => r.Update(TestEntity)).Returns(TestEntity.<#= outParam.PropertyName #>);
+            var logic = new LogicFactory().Create<<#= ObjectData.EntityName #>>(<#= ObjectData.ObjectName #>DAL.Object);
+
+            var actual = logic.Save(TestEntity);
+
+            Assert.AreEqual(TestEntity.<#= outParam.PropertyName #>, actual);
+            <#= ObjectData.ObjectName #>DAL.Verify(x => x.Update(TestEntity), Times.Once);
+        }
+
+        [Test]
+        public void Test_Delete_Id()
+        {
+            <#= ObjectData.ObjectName #>DAL.Setup(r => r.Delete(TestEntity.Id));
+            var logic = new LogicFactory().Create<<#= ObjectData.EntityName #>>(<#= ObjectData.ObjectName #>DAL.Object);
+
+            logic.Delete(TestEntity.<#= outParam.PropertyName #>);
+
+            <#= ObjectData.ObjectName #>DAL.Verify(x => x.Delete(TestEntity.<#= outParam.PropertyName #>), Times.Once);
+        }
+    }
+}

@@ -1,0 +1,69 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MD_MiCASE_DOC_Contracts
+{
+    [DataContract]
+    [Serializable]
+    public class AzDocRelRequestContract : SecurityUserContract
+    {
+        [DataMember]
+        public Int32 RequestId { get; set; }
+        [DataMember]
+        public Int32 DocId { get; set; }
+        [DataMember]
+        public Int32 TypeId { get; set; }
+        [DataMember]
+        public Int32 SubtypeId { get; set; }
+        [DataMember]
+        public Int32 PropertyTypeId { get; set; }
+        [DataMember]
+        public Int32 ApprovalId { get; set; }
+        [DataMember]
+        public String Comment { get; set; }
+        [DataMember]
+        public Int32 StatusId { get; set; }
+        [DataMember]
+        public String ReasonTxt { get; set; }
+        [DataMember]
+        public Int32 DocumentId { get; set; }
+        [DataMember]
+        public DateTime? RequestDtm { get; set; }
+        [DataMember]
+        public DateTime? ExpirationDtm { get; set; }
+        [DataMember]
+        public Int32 UpdtUserId { get; set; }
+        [DataMember]
+        public DateTime? UpdtDtm { get; set; }
+        [DataMember]
+        public bool ActiveFlag { get; set; }
+        [DataMember]
+        public Int32 ChangeId { get; set; }
+        [DataMember]
+        public Boolean PendingNotification { get; set; }
+
+        [DataMember]
+        public ChangeHistoryContract ChangeHistory { get; set; }
+
+        public AzDocRelRequestContract()
+        {
+            ChangeHistory = new ChangeHistoryContract();
+        }
+    }
+
+    [CollectionDataContractAttribute]
+    [Serializable]
+    public class AzDocRelRequestContractList : List<AzDocRelRequestContract>
+    {
+
+    }
+}

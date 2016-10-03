@@ -1,0 +1,123 @@
+﻿<#@ template language="C#" inherits="DataTemplate" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+using System;
+using System.Collections.Generic;
+using System.Data;
+using Entities;
+using CodeGeneratorResult;
+
+namespace DAL
+{
+<#    var ObjectData = templateData.ObjectData;
+    var DeleteProcedureTemplate = templateData.ProcedureDataList["PR_DELETE"];
+    var GetAllProcedureTemplate = templateData.ProcedureDataList["PR_GET_ALL"];
+    var GetProcedureTemplate = templateData.ProcedureDataList["PR_GET"];
+    var InsertProcedureTemplate = templateData.ProcedureDataList["PR_INSERT"];
+    var UpdateProcedureTemplate = templateData.ProcedureDataList["PR_UPDATE"];
+ #>
+    public partial class <#= ObjectData.ObjectName #>DAL : IDAL<<#= ObjectData.EntityName #>>
+    {
+		IDbConnection Connection;
+
+        public <#= ObjectData.ObjectName #>DAL(IDbConnection connection)
+        {
+            Connection = connection;
+        }
+
+        private const String UPDATE_<#= ObjectData.TableName #> = "<#= UpdateProcedureTemplate.PackageName #>.<#= UpdateProcedureTemplate.ProcedureName #>";
+        private const String GET_<#= ObjectData.TableName #> = "<#= GetProcedureTemplate.PackageName #>.<#= GetProcedureTemplate.ProcedureName #>";
+        private const String INSERT_<#= ObjectData.TableName #> = "<#= InsertProcedureTemplate.PackageName #>.<#= InsertProcedureTemplate.ProcedureName #>";
+        private const String GET_ALL_<#= ObjectData.TableName #> = "<#= GetAllProcedureTemplate.PackageName #>.<#= GetAllProcedureTemplate.ProcedureName #>";
+        private const String DELETE_<#= ObjectData.TableName #> = "<#= DeleteProcedureTemplate.PackageName #>.<#= DeleteProcedureTemplate.ProcedureName #>";
+
+<#    var getParam = GetProcedureTemplate.InParam; #>
+		public bool Delete(int id)
+		{
+			int result = 0;
+			var cmd = Connection.CreateCommand();
+			cmd.CommandText = DELETE_<#= ObjectData.TableName #>;
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            var tableIdParameter = cmd.CreateParameter();
+            tableIdParameter.ParameterName = "<#= getParam.ParameterName #>";
+            tableIdParameter.DbType = DbType.<#= getParam.Type.Name #>;
+            tableIdParameter.Value = id;
+
+            cmd.Parameters.Add(tableIdParameter);
+            result = cmd.ExecuteNonQuery();
+
+            if (result == 0)
+                return false;
+
+            return true;
+		}
+
+<#    var getAllParam = GetAllProcedureTemplate.InParam; #>
+		public IEnumerable<<#= ObjectData.EntityName #>> GetAll()
+        {
+            var cmd = Connection.CreateCommand();
+            cmd.CommandText = GET_ALL_<#= ObjectData.TableName #>;
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                var item = new <#= ObjectData.EntityName #>(reader);
+                yield return item;
+            }
+        }
+
+        public <#= ObjectData.EntityName #> Get(int id)
+        {
+            var cmd = Connection.CreateCommand();
+            cmd.CommandText = GET_<#= ObjectData.TableName #>;
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.AddParameter(DbType.<#= getParam.Type.Name #>, "<#= getParam.ParameterName #>", id);
+
+            var reader = cmd.ExecuteReader();
+            if (reader.Read())
+                return new <#= ObjectData.EntityName #>(reader);
+            
+            return new <#= ObjectData.EntityName #>();
+        }
+
+<#   var outParam = InsertProcedureTemplate.OutParam;   #>
+		public int Save(<#= ObjectData.EntityName #> ent)
+        {
+            var cmd = Connection.CreateCommand();
+            cmd.CommandText = INSERT_<#= ObjectData.TableName #>;
+            cmd.CommandType = CommandType.StoredProcedure;
+
+			<#    WriteCommandParameters(InsertProcedureTemplate); #>
+
+            cmd.AddOutParameter(DbType.<#= outParam.Type.Name #>, "<#= outParam.ParameterName #>");
+			var reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                return (<#= outParam.Type.Name #>)reader["<#= outParam.ParameterName #>"];
+            }
+
+            return 0;
+		}
+		
+		 public int Update(<#= ObjectData.EntityName #> ent)
+        {
+            int result = 0;
+            var cmd = Connection.CreateCommand();
+            cmd.CommandText = UPDATE_<#= ObjectData.TableName #>;
+            cmd.CommandType = CommandType.StoredProcedure;
+
+			<#   WriteCommandParameters(UpdateProcedureTemplate); #>
+
+            result = cmd.ExecuteNonQuery();
+            if(result > 0)
+                return ent.Id;
+
+            return result;
+        }
+    }
+}
