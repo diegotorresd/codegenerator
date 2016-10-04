@@ -1,6 +1,6 @@
 *************************************
 **                                 **
-** A better Mi-Case Code Generator **
+**      A better Code Generator    **
 **                                 **
 *************************************
 
@@ -13,9 +13,9 @@ Usage:
 - compile the solution
 - copy the generated exe (and CodeGenerator.dll) to the generator/ folder 
 - review the config file to make sure you are using the correct connection string.
-- run MiCaseCodeGenerator, passing it the table names and (optionally) the files you want to generate.
+- run CodeGenerator-console, passing it the table names and (optionally) the files you want to generate.
 e.g.
-> MiCaseCodeGenerator --tableNames AZ_DOC_REL_REQUEST DOC_RELIGIOUS_LIMITS --fileTypes DAL Entity DALTests
+> CodeGenerator-console --tableNames EXAMPLETABLE1 EXAMPLETABLE2 --fileTypes DAL Entity DALTests
 
 - run "compile" to check that everything compiles.
 - run "test" to compile and run the tests
@@ -30,3 +30,6 @@ ASSUMPTIONS
 	- PR_UPDATE
 	- PR_INSERT
 	- PR_DELETE
+	
+LIMITATIONS
+- Only works in Oracle
