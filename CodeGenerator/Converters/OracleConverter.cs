@@ -27,10 +27,8 @@ namespace Converters
             this.DbConnection.Open();
         }
 
-        public OracleConverter(IDbConnection dbConnection, string databaseUserId)
+        public OracleConverter(IDbConnection dbConnection, string databaseUserId) : this(dbConnection)
         {
-            this.DbConnection = dbConnection;
-            this.DbConnection.Open();
             this.DatabaseUserId = databaseUserId;
         }
 

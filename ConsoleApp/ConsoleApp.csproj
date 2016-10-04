@@ -7,8 +7,8 @@
     <ProjectGuid>{0195B590-51DA-4028-BA2B-7479BEE74480}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiCaseCodeGenerator</RootNamespace>
-    <AssemblyName>MiCaseCodeGenerator</AssemblyName>
+    <RootNamespace>CodeGenerator</RootNamespace>
+    <AssemblyName>CodeGenerator-console</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
